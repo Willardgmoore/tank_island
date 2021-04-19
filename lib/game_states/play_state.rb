@@ -59,6 +59,9 @@ class PlayState < GameState
     if id == Gosu::KbF2
       toggle_profiling
     end
+    if id == Gosu::KbE
+      create_extra_tanks(1)
+    end
     if id == Gosu::KbR
       @tank.mark_for_removal
       @tank = Tank.new(@object_pool,
@@ -78,6 +81,13 @@ class PlayState < GameState
 
   def enter
     @hud.active = true
+  end
+
+  def create_extra_tanks(amount)
+    amount.times do |i|
+      Tank.new(@object_pool, AiInput.new(
+        @names.random, @object_pool))
+    end
   end
 
   private

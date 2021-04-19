@@ -5,8 +5,8 @@ class PauseState < GameState
 
   def initialize
     @message = Gosu::Image.from_text(
-      $window, "Game Paused",
-      Utils.title_font, 60)
+      "Game Paused",
+      60)
   end
 
   def enter
@@ -23,8 +23,7 @@ class PauseState < GameState
   end
 
   def music
-    @@music ||= Gosu::Song.new(
-      $window, Utils.media_path('menu_music.ogg'))
+    @@music ||= Gosu::Song.new(Utils.media_path('menu_music.ogg'))
   end
 
   def draw
@@ -42,7 +41,7 @@ class PauseState < GameState
 
   def info
     @info ||= Gosu::Image.from_text(
-      $window, 'Q: Quit to Main Menu',
+      'Q: Quit to Main Menu',
       Utils.main_font, 30)
   end
 

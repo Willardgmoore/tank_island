@@ -19,6 +19,11 @@ class Health < Component
     @health_updated = true
   end
 
+  def plus(amount)
+    @health = @health + amount
+    @health_updated = true
+  end
+
   def damaged?
     @health < @initial_health
   end

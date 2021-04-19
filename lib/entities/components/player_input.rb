@@ -9,6 +9,7 @@ class PlayerInput < Component
     @stats = Stats.new(name)
     @camera = camera
     @object_pool = object_pool
+    @turret_mode = false
   end
 
   def control(obj)
@@ -35,12 +36,37 @@ class PlayerInput < Component
       object.throttle_down = true
       object.physics.change_direction(
         change_angle(object.direction, *motion_buttons))
+    elsif any_button_down?(Gosu::KbH)
+      object.throttle_down = false
+      object.health.plus(1000)
+      object.fire_rate_modifier = 120
+      object.speed_modifier = 10
+    elsif any_button_down?(Gosu::KbC)
+      turret_mode
     else
       object.throttle_down = false
     end
 
     if Utils.button_down?(Gosu::MsLeft)
       object.shoot(*@camera.mouse_coords)
+    end
+  end
+
+  def turret_mode
+    @turret_mode = !@turret_mode
+    @angle = 0
+    while @turret_mode
+      d_x, d_y = @camera.target_delta_on_screen
+      atan = Math.atan2(($window.width / 2) - d_x - $window.mouse_x,
+                        ($window.height / 2) - d_y - $window.mouse_y)
+      object.gun_angle = -atan * 180 / Math::PI
+
+      object.shoot(d_x, d_y)
+      if @angle < 359
+        @angle += 1
+      elsif @angle = 360
+        @turret_mode = false
+      end
     end
   end
 
